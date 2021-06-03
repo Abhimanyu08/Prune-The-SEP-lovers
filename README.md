@@ -24,7 +24,7 @@ I calculated `head_imp` matrix and `rest_sep_attn` matrix for the model and plot
 
 We can see that after layer 6 the tokens pay high attention to `[SEP]`. The average head importance scores and rest_sep attention scores aftet this layers have a high negative correlation (average rest_sep attention for a layer goes down as head_imp goes up and vice versa).
 
-![](images/correalation_stats.PNG)
+![](images/correlation_stats.PNG)
 
 
 
