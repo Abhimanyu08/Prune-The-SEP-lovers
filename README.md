@@ -15,8 +15,8 @@ from transformers import BertForSequenceClassification
 model = BertForSequenceClassification.from_pretrained('A-bhimany-u08/bert-base-cased-qqp')
 ```
 
-## Experiments:
-
+## Experiments: 
+(code of experiments are available in this [colab notebook](https://colab.research.google.com/drive/1TfB95lpwpTJZZVVjKGwHtG5iv4dPgpsO?usp=sharing)) 
 
 I calculated `head_imp` matrix and `rest_sep_attn` matrix for the model and plotted their correlation.
 
