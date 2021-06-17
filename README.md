@@ -1,4 +1,4 @@
-# Prune-The-SEP-attendors
+# Prune-The-SEP-Lovers
 Experiments on pruning BERT attention heads with different strategies
 
 
@@ -9,7 +9,7 @@ and can be pruned based on a metric called `head_imp_score` which is calculated 
 
 To remedy this, there's another metric which can act as an alternate for `head_imp_score` which is `REST-SEP attention`. In this method, we calculate a matrix of similar shape as  `head_imp` matrix where the `[i,j]` element of matrix is the average attention the tokens pay to `[SEP]` token. The paper [What Does BERT Look At? An Analysis of BERT's Attention](https://arxiv.org/abs/1906.04341) shows that each attention head can specialise in a particular aspect of dependency parsing. for.eg head 7 in layer 5 can make the verb in the sentences attend to their subject. In that case the rest of the words which are not verbs will attend to `[SEP]` token. Therefore, `[SEP]` token can be used as 'no-op' by the other tokens. In that case, the heads which pay too much attention to `[SEP]` tokens can be pruned because their contribution may be negligible to the model's output.
 
-To verify this, I trained a BERT model on [Quora Question Pairs](https://gluebenchmark.com/tasks) dataset using the [transformers](https://huggingface.co/transformers/) library. The training script is available in `train.py`. The model achieves 89% validation accuracy and can be accessed from [huggingface model hub](https://huggingface.co/A-bhimany-u08/bert-base-cased-qqp) like so:
+To verify this, We trained a BERT model on [Quora Question Pairs](https://gluebenchmark.com/tasks) dataset using the [transformers](https://huggingface.co/transformers/) library. The training script is available in `train.py`. The model achieves 89% validation accuracy and can be accessed from [huggingface model hub](https://huggingface.co/A-bhimany-u08/bert-base-cased-qqp) like so:
 ```
 from transformers import BertForSequenceClassification
 
@@ -19,7 +19,7 @@ model = BertForSequenceClassification.from_pretrained('A-bhimany-u08/bert-base-c
 ## Experiments: 
 (code of experiments are available in this [colab notebook](https://colab.research.google.com/drive/1TfB95lpwpTJZZVVjKGwHtG5iv4dPgpsO?usp=sharing)) 
 
-I calculated `head_imp` matrix and `rest_sep_attn` matrix for the model and plotted their correlation.
+We calculated `head_imp` matrix and `rest_sep_attn` matrix for the model and plotted their correlation.
 
 ### Correlation between head importance scores and rest_sep attention scores.
 
@@ -30,7 +30,7 @@ We can see that the tokens pay high attention to `[SEP]` in later layers. The av
 ![](images/correlation_stats.PNG)
 
 This shows that heads with high res_sep attn can be chopped off in the same way as we can prune the heads with low head_imp score.
-Empirically, I noticed that pruning according to res_sep attn scores led to less decrease in full model accuracy than pruning according to head_imp scores after removing the same number of heads, as shown in graphs below. The graph also shows that pruning the heads randomly does not preserve the full model's performance for long and we can immediately see the faster deterioration in that case.
+Empirically, We noticed that pruning according to res_sep attn scores led to less decrease in full model accuracy than pruning according to head_imp scores after removing the same number of heads, as shown in graphs below. The graph also shows that pruning the heads randomly does not preserve the full model's performance for long and we can immediately see the faster deterioration in that case.
 ![](images/accuracies.png)
 
 This method does not require calling `backward()` and therefore requires less memory than it's counterpart.
